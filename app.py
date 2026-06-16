@@ -71,6 +71,8 @@ def load_all_models():
     # Now that we've verified all files exist locally, we can read them into memory
     tfidf = joblib.load('models/tfidf_vectorizer.pkl')
     svm = joblib.load('models/svm_model.pkl')
+    if hasattr(svm, "probability") and svm.probability:
+        svm._effective_probability = True
     dt = joblib.load('models/decision_tree_model.pkl')
     ada = joblib.load('models/adaboost_model.pkl')
     tokenizer = joblib.load('models/dl_tokenizer.pkl')

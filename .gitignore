@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.part
+
+# Large deep-learning artifacts — these are hosted as GitHub Release assets
+# (see utils/remote_models.py) and downloaded on first run, not committed.
+models/fnn_model.h5
+models/lstm_model.h5
+models/cnn_model.h5
+models/embedding_model/
+
+venv/
+.ipynb_checkpoints/
+.DS_Store
+.claude/

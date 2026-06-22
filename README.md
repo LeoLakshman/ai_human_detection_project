@@ -74,15 +74,12 @@ streamlit run app.py
 
 Before feeding text strings into classifiers, numbers are extracted across three distinct layers:
 
-* 
 **TF-IDF Representations:** Maps unique token distinctiveness matrices over a 5,000-column boundary space.
 
 
-* 
 **Sequential Embeddings:** Processes contextual semantics for our deep learning networks via deep vocabulary tokens.
 
 
-* 
 **Handcrafted Linguistic Features:** Measures sentence structural distribution shifts, word length token properties, and overall type-token vocabulary richness ratio (TTR) changes.
 
 
@@ -91,27 +88,21 @@ Before feeding text strings into classifiers, numbers are extracted across three
 
 Six distinct algorithms are evaluated side-by-side inside this system:
 
-* 
 **Support Vector Machine (SVM):** Tuned using `GridSearchCV` over parameters `C` and `kernel` space to isolate optimal linear separators on sparse vectors.
 
 
-* 
 **Decision Tree:** Configured with constrained max-depth parameters to establish interpretable text rules without risking over-fitting.
 
 
-* 
 **AdaBoost Ensemble:** Upgraded using an explicit shallow estimator base ($max\_depth=3$) combined with a balanced learning rate ($0.1$) to build higher-confidence boosting iteration bounds over tough classification points.
 
 
-* 
 **Feedforward NN (FNN):** A multi-layer architecture handling dense inputs, integrated with a steady optimizer learning rate ($0.0005$), dropout regularization boundaries ($0.4$), and automated `EarlyStopping` callbacks to keep weight updates clean.
 
 
-* 
 **LSTM Networks:** Reads inputs sequentially to map out stylistic patterns and maintain long-range document context dependencies.
 
 
-* 
 **1D CNN for Text:** Leverages expanded phrase filter feature banks ($filters=256$) combined with global max-pooling to pick up local phrase clusters.
 
 

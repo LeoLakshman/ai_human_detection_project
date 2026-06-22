@@ -58,7 +58,7 @@ If you re-train and re-upload new versions, bump the tag in
 streamlit run app.py
 ```
 
-🚀 Live Deployment: View the Live Streamlit App
+🚀 Live Deployment: View the Live Streamlit App (https://aihumandetectionproject-pkrqrkpakcqzk3rkynsa85.streamlit.app)
 The model selector only lists models that successfully loaded (or downloaded)
 — so it still works even if a release asset is temporarily unavailable, just
 with a smaller set of models to choose from.

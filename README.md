@@ -1,9 +1,3 @@
-To secure the **10 marks** allocated for the **README & Documentation** component of your project , your `README.md` file needs to be structured so that an evaluator can clone your repository, understand your code architecture, install the required packages, and launch the application in under 10 minutes. It must also explicitly detail your design decisions and model tuning process.
-
-Here is a fully compiled, professionally structured `README.md` written explicitly for your project. You can copy this text block directly, save it as `README.md` in your main project folder, and push it to your GitHub repository.
-
----
-
 ```markdown
 # AI vs. Human Text Detection Dashboard
 

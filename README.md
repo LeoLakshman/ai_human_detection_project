@@ -53,6 +53,8 @@ If you re-train and re-upload new versions, bump the tag in
 
 ## Running the app
 
+https://aihumandetectionproject-pkrqrkpakcqzk3rkynsa85.streamlit.app
+The above link is the published code and it is live
 ```bash
 streamlit run app.py
 ```

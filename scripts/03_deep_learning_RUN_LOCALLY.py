@@ -118,7 +118,13 @@ def train_and_eval(name, model, X_tr, X_te, epochs=8, batch_size=32):
                          batch_size=batch_size, callbacks=[es], verbose=2)
     train_time = time.time() - t0
 
-    proba = model.predict(X_te, verbose=0).ravel()
+    # Call the model directly rather than model.predict(): predict() routes
+    # inference through a tf.data iterator, which can deadlock on its very
+    # first call in a process where gensim's Word2Vec has already been loaded
+    # (BLAS/thread-pool contention between gensim's numpy backend and TF's
+    # Eigen threadpool) -- bit app.py's deployed prediction path; matched here
+    # for consistency even though fit() above already warms this process.
+    proba = model(X_te, training=False).numpy().ravel()
     pred = (proba >= 0.5).astype(int)
     acc, prec, rec, f1 = (accuracy_score(y_test, pred), precision_score(y_test, pred),
                            recall_score(y_test, pred), f1_score(y_test, pred))

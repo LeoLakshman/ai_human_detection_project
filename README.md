@@ -75,15 +75,3 @@ table via `deep_learning_results.json`.
 (4,088 human / 4,088 AI), label 0 = human, label 1 = AI. Split 80/20 stratified
 into `data/training_data/train.csv` and `data/test_data/test.csv`.
 
-## Notes for the write-up / demo video
-
-- Feature comparison (full dataset): TF-IDF alone reached ~97.9% accuracy;
-  linguistic features alone ~82.5%; combining them didn't improve on TF-IDF
-  alone for the linear model — i.e. TF-IDF is already capturing most of the
-  separable signal for this dataset.
-- "SVM" is implemented as a calibrated `LinearSVC` (linear kernel) — standard
-  practice for high-dimensional sparse TF-IDF features, and much faster than
-  a kernel SVM at this feature size with no accuracy loss.
-- The dataset's texts are long, formal/academic-style passages, so accuracy
-  likely drops on short, casual, or out-of-domain text — worth demonstrating
-  live in the app and discussing as a limitation.

@@ -14,6 +14,9 @@ import os
 GITHUB_RELEASE_BASE_URL = (
     "https://github.com/LeoLakshman/ai_human_detection_project/releases/download/v1.0.0"
 )
+GITHUB_RELEASE_API_URL = (
+    "https://api.github.com/repos/LeoLakshman/ai_human_detection_project/releases/tags/v1.0.0"
+)
 
 # Update this list if you rename assets in the release, or add more (e.g. if
 # gensim split word2vec.model into word2vec.model + word2vec.model.wv.vectors.npy
@@ -27,14 +30,38 @@ REMOTE_ASSETS = {
 }
 
 
-def download_asset(asset_filename, dest_path, chunk_size=1024 * 1024, _st=None):
-    """Download a single asset from the GitHub release if dest_path doesn't already exist.
-    Returns True if the file is present locally after this call (already-cached counts),
-    False if it could not be obtained.
+def _remote_asset_sizes():
+    """Fetch {asset_name: size_in_bytes} for the release, once per process.
+    Used to detect a locally-cached file that's stale relative to the release
+    (e.g. a previous deploy downloaded an old asset before this one was fixed
+    and re-uploaded) so we don't keep serving it forever just because it
+    already exists on disk. Returns {} on any failure (offline, rate-limited,
+    etc.) — callers fall back to trusting whatever's already on disk."""
+    try:
+        import requests
+        r = requests.get(GITHUB_RELEASE_API_URL, timeout=10)
+        r.raise_for_status()
+        return {a["name"]: a["size"] for a in r.json().get("assets", [])}
+    except Exception:
+        return {}
+
+
+def download_asset(asset_filename, dest_path, chunk_size=1024 * 1024, _st=None, remote_sizes=None):
+    """Download a single asset from the GitHub release. Skips the download if
+    dest_path already exists AND matches the release's current size for that
+    asset; re-downloads (overwrites) if the local copy is stale or undersized.
+    Returns True if the file is present locally after this call, False if it
+    could not be obtained.
     `_st` is an optional streamlit module reference, used to show a progress bar in the app.
     """
+    if remote_sizes is None:
+        remote_sizes = _remote_asset_sizes()
+    expected_size = remote_sizes.get(asset_filename)
+
     if os.path.exists(dest_path):
-        return True
+        if expected_size is None or os.path.getsize(dest_path) == expected_size:
+            return True
+        # Local copy exists but doesn't match the release anymore — fall through and re-download.
 
     try:
         import requests
@@ -74,8 +101,9 @@ def download_asset(asset_filename, dest_path, chunk_size=1024 * 1024, _st=None):
 
 
 def ensure_assets(names, _st=None):
-    """Ensure each of `names` (keys in REMOTE_ASSETS) is downloaded locally.
-    Returns dict {name: bool_success}."""
+    """Ensure each of `names` (keys in REMOTE_ASSETS) is downloaded locally and
+    up to date with the release. Returns dict {name: bool_success}."""
+    remote_sizes = _remote_asset_sizes()  # one API call, reused for every asset below
     results = {}
     for name in names:
         dest = REMOTE_ASSETS.get(name)
@@ -83,8 +111,8 @@ def ensure_assets(names, _st=None):
             results[name] = False
             continue
         if _st is not None:
-            with _st.spinner(f"Downloading {name} from GitHub Release (first run only)..."):
-                results[name] = download_asset(name, dest, _st=_st)
+            with _st.spinner(f"Downloading {name} from GitHub Release..."):
+                results[name] = download_asset(name, dest, _st=_st, remote_sizes=remote_sizes)
         else:
-            results[name] = download_asset(name, dest)
+            results[name] = download_asset(name, dest, remote_sizes=remote_sizes)
     return results

@@ -281,6 +281,11 @@ if run_btn and text_input.strip():
         st.warning("This text is quite short — predictions are more reliable on 50+ words.")
 
     # ---- Single-model prediction ----
+    # Computed unconditionally (cheap, no model needed) so it's always available
+    # for the report tab below even if the selected model's prediction fails.
+    ling_feats = extract_linguistic_features(simple_clean_text(text_input))
+    confidence = None
+
     with tab_predict:
         try:
             pred, proba = predict_with_model(model_choice, text_input, all_models, tfidf, ling_scaler, w2v, tokenizer)
@@ -297,7 +302,6 @@ if run_btn and text_input.strip():
                 st.metric("Confidence", f"{confidence*100:.1f}%")
                 st.progress(float(confidence))
             with c2:
-                ling_feats = extract_linguistic_features(simple_clean_text(text_input))
                 st.write("**Quick stylistic signals**")
                 st.write(f"- Words: {word_count}")
                 st.write(f"- Avg sentence length: {ling_feats['avg_sentence_length']:.1f} words")

@@ -72,7 +72,7 @@ def load_keras_models():
         st.sidebar.warning(f"Couldn't download models from GitHub Release ({e}). "
                              f"Falling back to whatever already exists in models/.")
 
-    for name, fname in [("FNN (Keras)", "fnn_model.h5"),
+    for name, fname in [
                          ("LSTM", "lstm_model.h5"),
                          ("CNN", "cnn_model.h5")]:
         path = os.path.join(MODELS_DIR, fname)
@@ -258,7 +258,7 @@ with st.sidebar:
 
     st.header("Model")
     model_choice = st.selectbox("Choose a classifier:", available_model_names)
-    missing_dl = [n for n in ["FNN (Keras)", "LSTM", "CNN"] if n not in keras_models]
+    missing_dl = [n for n in ["LSTM", "CNN"] if n not in keras_models]
     if missing_dl:
         st.caption(f"Not loaded (train locally to enable): {', '.join(missing_dl)}")
 

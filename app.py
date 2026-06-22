@@ -44,7 +44,7 @@ def load_sklearn_models():
         "SVM": "svm_model.pkl",
         "Decision Tree": "decision_tree_model.pkl",
         "AdaBoost": "adaboost_model.pkl",
-        "FNN (sklearn MLP reference)": "fnn_sklearn_model.pkl",
+        "FNN": "fnn_sklearn_model.pkl",
     }
     loaded = {}
     for name, fname in candidates.items():

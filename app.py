@@ -56,16 +56,7 @@ def load_sklearn_models():
 
 @st.cache_resource
 def load_keras_models():
-    """Load Keras .h5 models (FNN/LSTM/CNN). These were trained in Google Colab
-    (see notebooks/project1_notebook.ipynb, Section 3.4-3.6) and are too large
-    (~30MB each) to commit directly to the repo, so they're hosted as GitHub
-    Release assets and downloaded here on first run, then cached in models/.
-
-    This function is defensive on purpose: if anything in the download/import
-    chain fails (missing package, network issue, missing asset), we log a
-    warning in the sidebar and simply return fewer available models instead
-    of crashing the whole app.
-    """
+    
     loaded = {}
     try:
         from tensorflow.keras.models import load_model
